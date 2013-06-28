@@ -33,6 +33,7 @@ sub Load {
 
     $self->{'xc'} = R25->Rest->responseXpath();
     $self->{'xc'}->registerNs( 'r25', 'http://www.collegenet.com/r25' );
+    $self->{'xc'}->setContextNode( $self->{'xc'}->findnodes( '//r25:space' )->shift );
 
     return $self->Id;
 }
