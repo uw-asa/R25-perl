@@ -1,11 +1,9 @@
-package R25::Space;
+package R25::Reservation;
 
 use strict;
 use warnings;
 
-use R25::SpaceReservations;
-
-our $path = '/r25ws/servlet/wrd/run/space.xml';
+our $path = '/r25ws/servlet/wrd/run/reservation.xml';
 
 
 sub new  {
@@ -29,13 +27,13 @@ sub new  {
 
 sub Load {
     my $self = shift;
-    my $space_id = shift;
+    my $reservation_id = shift;
 
-    R25->Rest->GET( $path . R25->Rest->buildQuery( 'space_id', $space_id ) );
+    R25->Rest->GET( $path . R25->Rest->buildQuery( 'reservation_id', $reservation_id ) );
 
     $self->{'xc'} = R25->Rest->responseXpath();
     $self->{'xc'}->registerNs( 'r25', 'http://www.collegenet.com/r25' );
-    $self->{'xc'}->setContextNode( $self->{'xc'}->findnodes( '//r25:space' )->shift );
+    $self->{'xc'}->setContextNode( $self->{'xc'}->findnodes( '//r25:reservation' )->shift );
 
     return $self->Id;
 }
@@ -44,26 +42,14 @@ sub Load {
 sub Id {
     my $self = shift;
 
-    return $self->{'xc'}->findvalue( 'r25:space_id' );
+    return $self->{'xc'}->findvalue( 'r25:reservation_id' );
 }
 
 
-sub Name {
+sub EventName {
     my $self = shift;
 
-    return $self->{'xc'}->findvalue( 'r25:space_name' );
-}
-
-
-sub Reservations {
-    my $self = shift;
-    my %args = (
-        @_,
-        );
-
-    $args{'SpaceId'} = $self->Id;
-
-    return R25::SpaceReservations->new( %args );
+    return $self->{'xc'}->findvalue( 'r25:event/r25:event_name' );
 }
 
 
