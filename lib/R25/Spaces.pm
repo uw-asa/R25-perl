@@ -42,4 +42,12 @@ sub Find {
     return scalar(@{$self->{'space_list'}});
 }
 
+
+sub List {
+    my $self = shift;
+
+    return @{$self->{'space_list'}};
+}
+
+
 1;
