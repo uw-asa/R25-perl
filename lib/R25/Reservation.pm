@@ -46,11 +46,66 @@ sub Id {
 }
 
 
+=head State
+
+    returns the state of the reservation as an integer
+
+    1 Standard
+    2 Exception
+    3 Warning
+    4 Override
+   99 Cancelled
+
+=cut
+
+sub State {
+    my $self = shift;
+
+    return $self->{'xc'}->findvalue( 'r25:reservation_state' );
+}
+
+
+sub StartDT {
+    my $self = shift;
+
+    return $self->{'xc'}->findvalue( 'r25:reservation_start_dt' );
+}
+
+
+sub EndDT {
+    my $self = shift;
+
+    return $self->{'xc'}->findvalue( 'r25:reservation_end_dt' );
+}
+
+
+
 sub EventName {
     my $self = shift;
 
     return $self->{'xc'}->findvalue( 'r25:event/r25:event_name' );
 }
+
+
+=head EventState
+
+    returns the state of the event as an integer
+
+    0 Draft
+    1 Tentative
+    2 Confirmed
+    3 Sealed
+   98 Denied
+   99 Cancelled
+
+=cut
+
+sub EventState {
+    my $self = shift;
+
+    return $self->{'xc'}->findvalue( 'r25:event/r25:state' );
+}
+
 
 
 1;
