@@ -39,7 +39,10 @@ sub Find {
         @_,
         );
 
-    my %findargs;
+    my %findargs = (
+        scope => 'extended',
+        );
+
     $findargs{'space_id'} = $args{'SpaceId'} if $args{'SpaceId'};
     $findargs{'start_dt'} = strftime( "%Y%m%dT%H%M%S00", localtime($args{'StartDT'}) ) if $args{'StartDT'};
     $findargs{'end_dt'}   = strftime( "%Y%m%dT%H%M%S00", localtime($args{'EndDT'})   ) if $args{'EndDT'};
@@ -53,6 +56,8 @@ sub Find {
 
     my @nodes = $self->{'xc'}->findnodes( '//r25:space_reservation' );
 
+    return undef unless scalar @nodes;
+
     for my $node (@nodes) {
         my $space = R25::Reservation->new(node => $node);
         push @{$self->{'reservation_list'}}, $space;
@@ -64,6 +69,8 @@ sub Find {
 
 sub List {
     my $self = shift;
+
+    return undef unless $self->{'reservation_list'};
 
     return @{$self->{'reservation_list'}};
 }
