@@ -73,6 +73,13 @@ sub State {
 }
 
 
+sub ParentId {
+    my $self = shift;
+
+    return $self->{'xc'}->findvalue( 'r25:parent_id' );
+}
+
+
 
 
 1;

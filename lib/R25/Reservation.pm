@@ -80,10 +80,24 @@ sub EndDT {
 
 
 
+sub EventId {
+    my $self = shift;
+
+    return $self->{'xc'}->findvalue( 'r25:event/r25:event_id' );
+}
+
+
 sub EventName {
     my $self = shift;
 
     return $self->{'xc'}->findvalue( 'r25:event/r25:event_name' );
+}
+
+
+sub EventTitle {
+    my $self = shift;
+
+    return $self->{'xc'}->findvalue( 'r25:event/r25:event_title' );
 }
 
 
