@@ -1,4 +1,4 @@
-package R25::SpaceReservations;
+package R25::Reservations;
 
 use strict;
 use warnings;
@@ -7,22 +7,13 @@ use R25::Reservation;
 
 use POSIX qw(strftime);
 
-our $path = '/r25ws/servlet/wrd/run/rm_reservations.xml';
+our $path = '/r25ws/servlet/wrd/run/reservations.xml';
 
 
 sub new  {
     my $class = shift;
-    my %args = (
-        node => undef,
-        @_,
-        );
-
-    my $self  = {};
+    my $self  = { @_ };
     bless ($self, $class);
-
-    if ( $args{'SpaceId'} ) {
-        $self->Find( %args );
-    }
 
     return $self;
 }
@@ -31,6 +22,7 @@ sub new  {
 sub Find {
     my $self = shift;
     my %args = (
+        EventId    => undef, # int
         SpaceId    => undef, # int
         StartDT    => undef, # time 
         EndDT      => undef, # time
@@ -43,18 +35,20 @@ sub Find {
         scope => 'extended',
         );
 
+    $findargs{'event_id'} = $args{'EventId'} if $args{'EventId'};
     $findargs{'space_id'} = $args{'SpaceId'} if $args{'SpaceId'};
-    $findargs{'start_dt'} = strftime( "%Y%m%dT%H%M%S00", localtime($args{'StartDT'}) ) if $args{'StartDT'};
-    $findargs{'end_dt'}   = strftime( "%Y%m%dT%H%M%S00", localtime($args{'EndDT'})   ) if $args{'EndDT'};
+    $findargs{'start_dt'} = $args{'StartDT'} if $args{'StartDT'};
+    $findargs{'end_dt'}   = $args{'EndDT'}   if $args{'EndDT'};
     $findargs{'event_state'} = join( '+', @{$args{'event_state'}} ) if $args{'EventState'};
     $findargs{'state'}       = join( '+', @{$args{'state'}}       ) if $args{'State'};
 
+    #warn ( $path . R25->Rest->buildQuery( %findargs ) );
     R25->Rest->GET( $path . R25->Rest->buildQuery( %findargs ) );
 
     $self->{'xc'} = R25->Rest->responseXpath();
     $self->{'xc'}->registerNs( 'r25', 'http://www.collegenet.com/r25' );
 
-    my @nodes = $self->{'xc'}->findnodes( '//r25:space_reservation' );
+    my @nodes = $self->{'xc'}->findnodes( '//r25:reservation' );
 
     return undef unless scalar @nodes;
 

@@ -31,10 +31,13 @@ sub Load {
     my $self = shift;
     my $space_id = shift;
 
-    R25->Rest->GET( $path . R25->Rest->buildQuery( 'space_id', $space_id ) );
+    R25->Rest->GET( $path . R25->Rest->buildQuery( space_id => $space_id ) );
 
     $self->{'xc'} = R25->Rest->responseXpath();
     $self->{'xc'}->registerNs( 'r25', 'http://www.collegenet.com/r25' );
+
+    return undef unless $self->{'xc'}->exists( '//r25:space' );
+
     $self->{'xc'}->setContextNode( $self->{'xc'}->findnodes( '//r25:space' )->shift );
 
     return $self->Id;
