@@ -53,8 +53,8 @@ sub Find {
     return undef unless scalar @nodes;
 
     for my $node (@nodes) {
-        my $space = R25::Reservation->new(node => $node);
-        push @{$self->{'reservation_list'}}, $space;
+        my $reservation = R25::Reservation->new(node => $node);
+        push @{$self->{'reservation_list'}}, $reservation;
     }
 
     return scalar(@{$self->{'reservation_list'}});
