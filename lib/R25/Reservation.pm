@@ -154,6 +154,25 @@ sub EventState {
 }
 
 
+sub SpaceReservations {
+    my $self = shift;
+
+    my @nodes = $self->{'xc'}->findnodes( 'r25:space_reservation' );
+
+    my @space_reservation_list;
+    use R25::SpaceReservation;
+    for ( @nodes ) {
+        my $space_reservation = R25::SpaceReservation->new( node => $_ );
+        push @space_reservation_list, $space_reservation;
+    }
+
+    use R25::SpaceReservations;
+    my $space_reservations = R25::SpaceReservations->new( space_reservation_list => \@space_reservation_list );
+
+    return $space_reservations;
+}
+
+#deprecated, because reservation can have more than 1 space
 sub SpaceId {
     my $self = shift;
 
@@ -161,7 +180,7 @@ sub SpaceId {
         || $self->{'xc'}->findvalue( 'r25:space_reservation/r25:space_id' );
 }
 
-
+#deprecated, because reservation can have more than 1 space
 sub SpaceName {
     my $self = shift;
 

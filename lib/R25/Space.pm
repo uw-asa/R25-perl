@@ -58,6 +58,7 @@ sub Name {
 }
 
 
+#deprecated, spacereservatations does this by itself
 sub Reservations {
     my $self = shift;
     my %args = (
@@ -66,7 +67,10 @@ sub Reservations {
 
     $args{'SpaceId'} = $self->Id;
 
-    return R25::SpaceReservations->new( %args );
+    my $reservations = R25::SpaceReservations->new;
+    $reservations->Find( %args );
+
+    return $reservations;
 }
 
 
