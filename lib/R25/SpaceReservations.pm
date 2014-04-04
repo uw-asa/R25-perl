@@ -12,17 +12,8 @@ our $path = '/r25ws/servlet/wrd/run/rm_reservations.xml';
 
 sub new  {
     my $class = shift;
-    my %args = (
-        node => undef,
-        @_,
-        );
-
-    my $self  = {};
+    my $self  = { @_ };
     bless ($self, $class);
-
-    if ( $args{'SpaceId'} ) {
-        $self->Find( %args );
-    }
 
     return $self;
 }
@@ -60,19 +51,19 @@ sub Find {
 
     for my $node (@nodes) {
         my $space = R25::Reservation->new(node => $node);
-        push @{$self->{'reservation_list'}}, $space;
+        push @{$self->{'space_reservation_list'}}, $space;
     }
 
-    return scalar(@{$self->{'reservation_list'}});
+    return scalar(@{$self->{'space_reservation_list'}});
 }
 
 
 sub List {
     my $self = shift;
 
-    return () unless $self->{'reservation_list'};
+    return () unless $self->{'space_reservation_list'};
 
-    return @{$self->{'reservation_list'}};
+    return @{$self->{'space_reservation_list'}};
 }
 
 

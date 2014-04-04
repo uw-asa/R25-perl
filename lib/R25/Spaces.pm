@@ -10,7 +10,7 @@ our $path = '/r25ws/servlet/wrd/run/spaces.xml';
 
 sub new  {
     my $class = shift;
-    my $self  = {};
+    my $self  = { @_ };
     bless ($self, $class);
 
     return $self;
